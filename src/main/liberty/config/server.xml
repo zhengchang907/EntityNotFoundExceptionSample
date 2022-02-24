@@ -17,7 +17,7 @@
     <applicationManager autoExpand="true"/>
 
     <!-- Define web application with its context root and location -->
-    <webApplication contextRoot="/" id="javaee-cafe" location="${server.config.dir}/apps/javaee-cafe.war">
+    <webApplication contextRoot="javaee-cafe" id="javaee-cafe" location="javaee-cafe.war">
     </webApplication>
 
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
