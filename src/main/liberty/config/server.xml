@@ -1,14 +1,76 @@
 <server description="defaultServer">
     <!-- Enable features -->
     <featureManager>
+        <feature>appClientSupport-1.0</feature>
+        <feature>appSecurity-2.0</feature>
+        <feature>appSecurity-3.0</feature>
+        <feature>batch-1.0</feature>
+        <feature>beanValidation-2.0</feature>
+        <feature>bells-1.0</feature>
         <feature>cdi-2.0</feature>
-        <feature>jaxb-2.2</feature>
-        <feature>jsf-2.3</feature>
-        <feature>jaxrs-2.1</feature>
+        <feature>concurrent-1.0</feature>
+        <feature>distributedMap-1.0</feature>
+        <feature>ejb-3.2</feature>
+        <feature>ejbHome-3.2</feature>
         <feature>ejbLite-3.2</feature>
-        <feature>jpa-2.2</feature>
+        <feature>ejbPersistentTimer-3.2</feature>
+        <feature>ejbRemote-3.2</feature>
+        <feature>el-3.0</feature>
+        <feature>j2eeManagement-1.1</feature>
+        <feature>jacc-1.5</feature>
+        <feature>jaspic-1.1</feature>
+        <feature>javaMail-1.6</feature>
+        <feature>jaxb-2.2</feature>
+        <feature>jaxrs-2.1</feature>
+        <feature>jaxrsClient-2.1</feature>
+        <feature>jaxws-2.2</feature>
+        <feature>jca-1.7</feature>
+        <feature>jcaInboundSecurity-1.0</feature>
+        <feature>jdbc-4.2</feature>
+        <feature>jms-2.0</feature>
+        <feature>jndi-1.0</feature>
+        <feature>jpaContainer-2.2</feature>
+        <feature>jsf-2.3</feature>
+        <feature>json-1.0</feature>
+        <feature>jsonb-1.0</feature>
+        <feature>jsonp-1.1</feature>
+        <feature>jsp-2.3</feature>
         <feature>localConnector-1.0</feature>
+        <feature>managedBeans-1.0</feature>
+        <feature>mdb-3.2</feature>
+        <feature>restConnector-2.0</feature>
+        <feature>servlet-4.0</feature>
+        <feature>ssl-1.0</feature>
+        <feature>wasJmsClient-2.0</feature>
+        <feature>wasJmsSecurity-1.0</feature>
+        <feature>wasJmsServer-1.0</feature>
+        <feature>websocket-1.1</feature>
     </featureManager>
+
+
+    <keyStore id="defaultKeyStore" password="{xor}EzY9Oi0rJg=="/>
+    <quickStartSecurity userName="bob" userPassword="mypwd"/>
+    <sslDefault sslRef="supportedClientAuthenticationSSLConfig"/>
+    <ssl clientAuthenticationSupported="true" id="supportedClientAuthenticationSSLConfig" keyStoreRef="defaultKeyStore"/>
+
+    <iiopEndpoint id="defaultIiopEndpoint" iiopPort="2809">
+        <iiopsOptions iiopsPort="2810" sslRef="supportedClientAuthenticationSSLConfig"/>
+    </iiopEndpoint>
+
+    <orb id="defaultOrb">
+        <serverPolicy.csiv2>
+            <layers>
+                <authenticationLayer establishTrustInClient="Supported" mechanisms="GSSUP"/>
+                <transportLayer sslRef="supportedClientAuthenticationSSLConfig"/>
+            </layers>
+        </serverPolicy.csiv2>
+        <clientPolicy.csiv2>
+            <layers>
+                <authenticationLayer establishTrustInClient="Supported" mechanisms="GSSUP"/>
+                <transportLayer sslRef="supportedClientAuthenticationSSLConfig"/>
+            </layers>
+        </clientPolicy.csiv2>
+    </orb>
 
     <!-- Define http & https endpoints -->
     <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
@@ -24,6 +86,8 @@
         <jdbcDriver libraryRef="driver-library"/>
         <properties.microsoft.sqlserver databaseName="${db.name}" password="${db.password}" portNumber="${db.port.number}" serverName="${db.server.name}" user="${db.user}"/>
     </dataSource>
+    
+    <bell libraryRef="driver-library"/>
 
     <library id="driver-library">
         <fileset dir="${shared.resource.dir}" includes="*.jar"/>
