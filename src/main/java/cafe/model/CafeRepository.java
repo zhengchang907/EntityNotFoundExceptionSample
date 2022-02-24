@@ -1,6 +1,11 @@
 package cafe.model;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +32,26 @@ public class CafeRepository {
 
     public Coffee persistCoffee(Coffee coffee) {
         logger.log(Level.INFO, "Persisting the new coffee {0}.", coffee);
-        this.entityManager.persist(coffee);
+//        this.entityManager.persist(coffee);
+        String query = "INSERT INTO COFFEE (NAME, PRICE) VALUES (?, ?)";
+
+        try (Connection conn = this.entityManager.unwrap(java.sql.Connection.class)) {
+        	logger.log(Level.INFO, "Connection established successfully: {0}", conn);
+        	
+        	try (PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        		statement.setString(1, coffee.getName());
+        		statement.setFloat(2, coffee.getPrice().floatValue());
+        		
+        		statement.executeUpdate();
+        		
+        		try (ResultSet keys = statement.getGeneratedKeys()) {
+        			keys.next();
+        			coffee.setId(keys.getLong(1));
+        		}
+        	}
+        } catch (SQLException e) {
+        	logger.log(Level.INFO, "SQLException: {0}", e);
+        }
         return coffee;
     }
     
